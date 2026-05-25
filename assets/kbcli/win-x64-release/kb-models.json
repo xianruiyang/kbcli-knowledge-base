@@ -1,0 +1,652 @@
+{
+  "models": [
+    {
+      "active_optimization_profile": "desktop-qcnc9ph",
+      "dimension": 1024,
+      "fingerprint": "sha256:00c08abcb115975a",
+      "format": "onnx",
+      "model": "BAAI/bge-m3",
+      "optimization_profiles": {
+        "desktop-qcnc9ph": {
+          "candidates": [
+            {
+              "device_id": 0,
+              "health": {
+                "dev_timings": false,
+                "embedding_cache": {
+                  "entries": 0
+                },
+                "execution_provider": {
+                  "device_id": 0,
+                  "requested": "cpu"
+                },
+                "model_registry": "C:\\Users\\gzxt\\.codex\\skills\\kbcli-knowledge-base\\assets\\kbcli\\win-x64-release\\kb-models.json",
+                "ok": true,
+                "onnxruntime_version": "1.24.4",
+                "runtime": "onnxruntime",
+                "service": "kb-vector-service",
+                "threads": {
+                  "inter_op": 0,
+                  "intra_op": 0
+                }
+              },
+              "measurements": [
+                {
+                  "avg_ms": 1755.92,
+                  "batch_size": 8,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 4.56,
+                  "max_ms": 1837.4,
+                  "max_tokens": 128,
+                  "min_ms": 1674.45,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 3370.8,
+                  "batch_size": 16,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 4.75,
+                  "max_ms": 3461.21,
+                  "max_tokens": 128,
+                  "min_ms": 3280.39,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 7292.0,
+                  "batch_size": 32,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 4.39,
+                  "max_ms": 7353.51,
+                  "max_tokens": 128,
+                  "min_ms": 7230.5,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 926.4,
+                  "batch_size": 1,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 1.08,
+                  "max_ms": 943.33,
+                  "max_tokens": 512,
+                  "min_ms": 909.48,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 1857.52,
+                  "batch_size": 2,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 1.08,
+                  "max_ms": 1884.57,
+                  "max_tokens": 512,
+                  "min_ms": 1830.46,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 4027.64,
+                  "batch_size": 4,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 0.99,
+                  "max_ms": 4211.66,
+                  "max_tokens": 512,
+                  "min_ms": 3843.62,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 2428.82,
+                  "batch_size": 1,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.41,
+                  "max_ms": 2477.52,
+                  "max_tokens": 1024,
+                  "min_ms": 2380.12,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 4544.62,
+                  "batch_size": 2,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.44,
+                  "max_ms": 4572.63,
+                  "max_tokens": 1024,
+                  "min_ms": 4516.61,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 3581.84,
+                  "batch_size": 1,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.28,
+                  "max_ms": 3728.66,
+                  "max_tokens": 1536,
+                  "min_ms": 3435.03,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                },
+                {
+                  "avg_ms": 7387.86,
+                  "batch_size": 2,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.27,
+                  "max_ms": 7493.29,
+                  "max_tokens": 1536,
+                  "min_ms": 7282.44,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                }
+              ],
+              "ok": true,
+              "provider": "cpu",
+              "warnings": []
+            },
+            {
+              "device_id": 0,
+              "health": {
+                "dev_timings": false,
+                "embedding_cache": {
+                  "entries": 0
+                },
+                "execution_provider": {
+                  "device_id": 0,
+                  "requested": "dml"
+                },
+                "model_registry": "C:\\Users\\gzxt\\.codex\\skills\\kbcli-knowledge-base\\assets\\kbcli\\win-x64-release\\kb-models.json",
+                "ok": true,
+                "onnxruntime_version": "1.24.4",
+                "runtime": "onnxruntime",
+                "service": "kb-vector-service",
+                "threads": {
+                  "inter_op": 0,
+                  "intra_op": 0
+                }
+              },
+              "measurements": [
+                {
+                  "avg_ms": 782.41,
+                  "batch_size": 8,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 10.22,
+                  "max_ms": 784.98,
+                  "max_tokens": 128,
+                  "min_ms": 779.85,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 1685.76,
+                  "batch_size": 16,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 9.49,
+                  "max_ms": 1762.36,
+                  "max_tokens": 128,
+                  "min_ms": 1609.15,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 3515.22,
+                  "batch_size": 32,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 9.1,
+                  "max_ms": 3528.09,
+                  "max_tokens": 128,
+                  "min_ms": 3502.35,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 947.49,
+                  "batch_size": 1,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 1.06,
+                  "max_ms": 960.66,
+                  "max_tokens": 512,
+                  "min_ms": 934.32,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 1918.15,
+                  "batch_size": 2,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 1.04,
+                  "max_ms": 1936.62,
+                  "max_tokens": 512,
+                  "min_ms": 1899.69,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 4173.35,
+                  "batch_size": 4,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 0.96,
+                  "max_ms": 4253.35,
+                  "max_tokens": 512,
+                  "min_ms": 4093.34,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 4418.99,
+                  "batch_size": 1,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.23,
+                  "max_ms": 4434.11,
+                  "max_tokens": 1024,
+                  "min_ms": 4403.87,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 10227.26,
+                  "batch_size": 2,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.2,
+                  "max_ms": 10478.57,
+                  "max_tokens": 1024,
+                  "min_ms": 9975.94,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 10945.08,
+                  "batch_size": 1,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.09,
+                  "max_ms": 10956.79,
+                  "max_tokens": 1536,
+                  "min_ms": 10933.37,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                },
+                {
+                  "avg_ms": 20240.56,
+                  "batch_size": 2,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.1,
+                  "max_ms": 20275.78,
+                  "max_tokens": 1536,
+                  "min_ms": 20205.34,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                }
+              ],
+              "ok": true,
+              "provider": "dml",
+              "warnings": []
+            },
+            {
+              "device_id": 1,
+              "health": {
+                "dev_timings": false,
+                "embedding_cache": {
+                  "entries": 0
+                },
+                "execution_provider": {
+                  "device_id": 1,
+                  "requested": "dml"
+                },
+                "model_registry": "C:\\Users\\gzxt\\.codex\\skills\\kbcli-knowledge-base\\assets\\kbcli\\win-x64-release\\kb-models.json",
+                "ok": true,
+                "onnxruntime_version": "1.24.4",
+                "runtime": "onnxruntime",
+                "service": "kb-vector-service",
+                "threads": {
+                  "inter_op": 0,
+                  "intra_op": 0
+                }
+              },
+              "measurements": [
+                {
+                  "avg_ms": 744.18,
+                  "batch_size": 8,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 10.75,
+                  "max_ms": 755.18,
+                  "max_tokens": 128,
+                  "min_ms": 733.17,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 1597.39,
+                  "batch_size": 16,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 10.02,
+                  "max_ms": 1607.5,
+                  "max_tokens": 128,
+                  "min_ms": 1587.27,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 3564.05,
+                  "batch_size": 32,
+                  "estimated_tokens": 128,
+                  "items_per_sec": 8.98,
+                  "max_ms": 3610.68,
+                  "max_tokens": 128,
+                  "min_ms": 3517.42,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 8,
+                  "workload": "chunk_short"
+                },
+                {
+                  "avg_ms": 1014.69,
+                  "batch_size": 1,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 0.99,
+                  "max_ms": 1028.16,
+                  "max_tokens": 512,
+                  "min_ms": 1001.22,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 2058.9,
+                  "batch_size": 2,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 0.97,
+                  "max_ms": 2140.92,
+                  "max_tokens": 512,
+                  "min_ms": 1976.87,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 4163.49,
+                  "batch_size": 4,
+                  "estimated_tokens": 512,
+                  "items_per_sec": 0.96,
+                  "max_ms": 4195.04,
+                  "max_tokens": 512,
+                  "min_ms": 4131.94,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 34,
+                  "workload": "chunk_medium"
+                },
+                {
+                  "avg_ms": 4474.51,
+                  "batch_size": 1,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.22,
+                  "max_ms": 4485.12,
+                  "max_tokens": 1024,
+                  "min_ms": 4463.9,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 10107.97,
+                  "batch_size": 2,
+                  "estimated_tokens": 1024,
+                  "items_per_sec": 0.2,
+                  "max_ms": 10140.32,
+                  "max_tokens": 1024,
+                  "min_ms": 10075.62,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 68,
+                  "workload": "chunk_long"
+                },
+                {
+                  "avg_ms": 10988.25,
+                  "batch_size": 1,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.09,
+                  "max_ms": 11003.51,
+                  "max_tokens": 1536,
+                  "min_ms": 10972.99,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                },
+                {
+                  "avg_ms": 20540.07,
+                  "batch_size": 2,
+                  "estimated_tokens": 1536,
+                  "items_per_sec": 0.1,
+                  "max_ms": 20554.38,
+                  "max_tokens": 1536,
+                  "min_ms": 20525.76,
+                  "purpose": "index",
+                  "rounds": 2,
+                  "sample_repeat": 102,
+                  "workload": "chunk_xlong"
+                }
+              ],
+              "ok": true,
+              "provider": "dml",
+              "warnings": []
+            }
+          ],
+          "created_at": "2026-05-15T07:54:42Z",
+          "host": "DESKTOP-QCNC9PH",
+          "merged_from_profile": "desktop-qcnc9ph",
+          "model": "BAAI/bge-m3",
+          "model_fingerprint": "sha256:00c08abcb115975a",
+          "model_registry": "C:\\Users\\gzxt\\.codex\\skills\\kbcli-knowledge-base\\assets\\kbcli\\win-x64-release\\kb-models.json",
+          "optimized_purpose": "index",
+          "optimized_purposes": {
+            "index": true,
+            "query": true
+          },
+          "profile_key": "desktop-qcnc9ph",
+          "schema_version": "1.0",
+          "strategy": {
+            "default": {
+              "avg_ms": 926.4,
+              "batch_size": 1,
+              "device_id": 0,
+              "estimated_tokens": 512,
+              "execution_provider": "cpu",
+              "items_per_sec": 1.08,
+              "max_ms": 943.33,
+              "max_tokens": 512,
+              "min_ms": 909.48,
+              "purpose": "index",
+              "rounds": 2,
+              "sample_repeat": 34,
+              "workload": "chunk_medium"
+            },
+            "index_buckets": [
+              {
+                "avg_ms": 744.18,
+                "batch_size": 8,
+                "device_id": 1,
+                "estimated_tokens": 128,
+                "execution_provider": "dml",
+                "items_per_sec": 10.75,
+                "max_estimated_tokens": 128,
+                "max_ms": 755.18,
+                "max_tokens": 128,
+                "min_ms": 733.17,
+                "purpose": "index",
+                "rounds": 2,
+                "sample_repeat": 8,
+                "workload": "chunk_short"
+              },
+              {
+                "avg_ms": 926.4,
+                "batch_size": 1,
+                "device_id": 0,
+                "estimated_tokens": 512,
+                "execution_provider": "cpu",
+                "items_per_sec": 1.08,
+                "max_estimated_tokens": 512,
+                "max_ms": 943.33,
+                "max_tokens": 512,
+                "min_ms": 909.48,
+                "purpose": "index",
+                "rounds": 2,
+                "sample_repeat": 34,
+                "workload": "chunk_medium"
+              },
+              {
+                "avg_ms": 4544.62,
+                "batch_size": 2,
+                "device_id": 0,
+                "estimated_tokens": 1024,
+                "execution_provider": "cpu",
+                "items_per_sec": 0.44,
+                "max_estimated_tokens": 1024,
+                "max_ms": 4572.63,
+                "max_tokens": 1024,
+                "min_ms": 4516.61,
+                "purpose": "index",
+                "rounds": 2,
+                "sample_repeat": 68,
+                "workload": "chunk_long"
+              },
+              {
+                "avg_ms": 3581.84,
+                "batch_size": 1,
+                "device_id": 0,
+                "estimated_tokens": 1536,
+                "execution_provider": "cpu",
+                "items_per_sec": 0.28,
+                "max_estimated_tokens": 1536,
+                "max_ms": 3728.66,
+                "max_tokens": 1536,
+                "min_ms": 3435.03,
+                "purpose": "index",
+                "rounds": 2,
+                "sample_repeat": 102,
+                "workload": "chunk_xlong"
+              }
+            ],
+            "query": {
+              "avg_ms": 54.32,
+              "batch_size": 1,
+              "device_id": 0,
+              "estimated_tokens": 15,
+              "execution_provider": "dml",
+              "items_per_sec": 18.41,
+              "max_ms": 57.8,
+              "max_tokens": 64,
+              "min_ms": 51.37,
+              "purpose": "query",
+              "rounds": 3,
+              "sample_repeat": 1,
+              "workload": "query_short"
+            }
+          },
+          "vector_service_executable": "D:\\program\\RagTest\\kbCli\\.build\\windows-msvc-release-directml\\Release\\kb-vector-service.exe",
+          "vector_service_fingerprint": "sha256:52b12c54261ed279",
+          "workloads": [
+            {
+              "batch_sizes": [
+                8,
+                16,
+                32
+              ],
+              "estimated_tokens": 128,
+              "max_tokens": 128,
+              "name": "chunk_short",
+              "purpose": "index",
+              "sample_repeat": 8
+            },
+            {
+              "batch_sizes": [
+                1,
+                2,
+                4
+              ],
+              "estimated_tokens": 512,
+              "max_tokens": 512,
+              "name": "chunk_medium",
+              "purpose": "index",
+              "sample_repeat": 34
+            },
+            {
+              "batch_sizes": [
+                1,
+                2
+              ],
+              "estimated_tokens": 1024,
+              "max_tokens": 1024,
+              "name": "chunk_long",
+              "purpose": "index",
+              "sample_repeat": 68
+            },
+            {
+              "batch_sizes": [
+                1,
+                2
+              ],
+              "estimated_tokens": 1536,
+              "max_tokens": 1536,
+              "name": "chunk_xlong",
+              "purpose": "index",
+              "sample_repeat": 102
+            }
+          ]
+        }
+      },
+      "path": "C:\\model\\bge-m3",
+      "precision": "fp32",
+      "registered_at": "2026-05-14T03:38:55Z"
+    }
+  ]
+}
