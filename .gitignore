@@ -1,0 +1,11 @@
+# Local machine state
+assets/kbcli/win-x64-release/kb-models.json
+runtimeLogs/
+*.log
+*.tmp
+
+# Editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

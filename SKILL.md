@@ -16,9 +16,12 @@ description: 当 Codex 需要使用随 skill 打包的 kbCli Release 运行时�
 ```powershell
 $SkillFile = "<loaded SKILL.md full path>"
 if (-not (Test-Path -LiteralPath $SkillFile -PathType Leaf)) {
-    $Candidate = Join-Path (Get-Location) "skills\kbcli-knowledge-base\SKILL.md"
-    if (Test-Path -LiteralPath $Candidate -PathType Leaf) {
-        $SkillFile = $Candidate
+    foreach ($Relative in @("kbcli-knowledge-base\SKILL.md", "skills\kbcli-knowledge-base\SKILL.md")) {
+        $Candidate = Join-Path (Get-Location) $Relative
+        if (Test-Path -LiteralPath $Candidate -PathType Leaf) {
+            $SkillFile = $Candidate
+            break
+        }
     }
 }
 if (-not (Test-Path -LiteralPath $SkillFile -PathType Leaf)) {

@@ -189,7 +189,7 @@ Promotion 前使用 `--collection` snapshot 并验证 staging collection。当 Q
 调试时设置 `KB_LOG_DIR` 到项目日志目录，使 console JSON 保持可解析，同时持久化 runtime details：
 
 ```powershell
-$env:KB_LOG_DIR = "D:\program\RagTest\runtimeLogs"
+$env:KB_LOG_DIR = "<project-runtimeLogs-dir>"
 ```
 
 不要无意留下只用于一次性 smoke-test 的 helper services。只有当 vector service 仅为临时测试启动，且后续 KB 工作不依赖它时，才停止：

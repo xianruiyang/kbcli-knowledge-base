@@ -49,7 +49,7 @@ $Manifest = $Runtime.manifest
 & $KbExe fetch --manifest $Manifest --chunk-id "<chunk_id>" --include-source --include-links --json
 ```
 
-`scripts/resolve-kbcli-runtime.ps1` 应优先查找 `$env:USERPROFILE\.codex\skills\kbcli-knowledge-base\SKILL.md`，再查找当前工作目录的 `skills/kbcli-knowledge-base/SKILL.md` 和与当前 KB skill 并列的 `kbcli-knowledge-base/SKILL.md`。找到后调用其 `scripts/resolve-kbcli.ps1`，并返回当前 KB 的 manifest path。这样新对话里 agent 只加载具体 KB skill，也能被导向正确 runtime。
+`scripts/resolve-kbcli-runtime.ps1` 应优先查找 `$env:USERPROFILE\.codex\skills\kbcli-knowledge-base\SKILL.md`，再查找当前工作目录的 `kbcli-knowledge-base/SKILL.md`，兼容旧布局时再尝试 `skills/kbcli-knowledge-base/SKILL.md`，最后检查与当前 KB skill 并列的 `kbcli-knowledge-base/SKILL.md`。找到后调用其 `scripts/resolve-kbcli.ps1`，并返回当前 KB 的 manifest path。这样新对话里 agent 只加载具体 KB skill，也能被导向正确 runtime。
 
 按需检查或创建：
 
