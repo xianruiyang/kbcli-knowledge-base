@@ -1,20 +1,10 @@
-# kbCli 维护与运维
+# 维护与运维
 
-更新、故障排查、修复、package 检查和长期 KB 维护时，使用此 reference。
+运行时变量见 [SKILL.md](../SKILL.md)。只执行当前任务涉及的内容、索引或服务操作；检查范围见 [知识库质量与验收](quality-definition.md)。
 
-命令示例使用 `SKILL.md` 中定义的随包 Release 运行时变量 `$KbExe` 和 `$VectorExe`。
+## 内容更新
 
-## 更新流程
-
-编辑前检查状态：
-
-```powershell
-& $KbExe info --manifest <manifest> --json
-& $KbExe source status --manifest <manifest> --json
-& $KbExe index status --manifest <manifest> --json
-```
-
-Source 变化后：
+先确认 manifest、来源与索引状态。常规全流程使用 authoring 中的 pipeline；需要分阶段控制时：
 
 ```powershell
 & $KbExe source sync --manifest <manifest> --json
@@ -24,178 +14,44 @@ Source 变化后：
 & $KbExe index build --manifest <manifest> --target all --json
 ```
 
-只修改 manifest `embedding_text` policy 时，也要运行 `chunk --changed-only` 或完整 pipeline。该 policy 影响 `chunks/chunks.jsonl` 中的 `embedding_text` 和 vector embedding fingerprint；FTS 与可读 Markdown 不需要因为链接折叠策略变化而改变，但 vector index 必须重建。
+来源暂时不可访问不等于有意删除。确认删除时使用 `source remove --source-id <id>`，再更新派生内容与索引，不手动删除索引行。
 
-Source 删除时，使用 CLI tombstone 路径，不要手动删 rows：
+向量构建复用输入、元数据和模型身份均匹配的点，只嵌入新增或变化项；替换批次成功后再删除旧点。失败后重跑可复用已写入的点，但不是整个 collection 的原子事务。需要原子发布时使用已有 staging/alias 工作流。
 
-```powershell
-& $KbExe source remove --manifest <manifest> --source-id <source-id> --json
-& $KbExe ingest --manifest <manifest> --changed-only --json
-& $KbExe chunk --manifest <manifest> --changed-only --json
-& $KbExe content build --manifest <manifest> --json
-& $KbExe index build --manifest <manifest> --target all --json
-```
+不要为普通更新先运行 `index clean`。模型语义、维度、chunking 或 `embedding_text` policy 变化可能导致大量向量重新计算；policy 变化也需更新 chunks。具体性能取决于当前版本与已有索引格式。
 
-当前 kbCli update policy 是 source/chunk 增量，vector index 也是 delta-safe。`ingest --changed-only` 和 `chunk --changed-only` 复用未变化 source/docs；`index build --target vector` 会扫描当前 Qdrant collection 中同 `kb_id` 的 points，复用 `chunk_id`、`chunk_fingerprint`、`embedding_text_policy_fingerprint` 与 `embedding_fingerprint` 全部匹配的 points，只对新增或变更 chunks 做 embedding/upsert，并删除已删除、过期或 fingerprint 不匹配的 points。
+向量依赖不可用且任务允许只更新全文索引时，可用 `--target fts`，明确 vector/hybrid 索引仍旧或不可用。
 
-Vector 构建过程中会写入 `state/vector-index-build-state.json`。如果构建进程被完整停止或杀掉，保留已成功 upsert 的 Qdrant points；下次重新运行同一个 `index build --target vector` 或 pipeline 时，会像增量更新一样跳过已完成 points，只继续缺失或变更部分。新版本写锁会记录 `pid`；同主机死进程留下的 `state/kb.lock` 会在下次写入命令中自动清理。
-
-只有在需要主动丢弃现有向量时才先运行 `index clean --target vector`。`kb_id`、embedding model/dimension、`embedding_text` policy 或 chunking 策略整体变化时，当前 chunks 通常会全部变为待处理；这仍会通过 delta planner 删除旧 fingerprint points 后重建当前 chunk set。
-
-如果 source path 暂时缺失，先诊断缺失路径，再视为有意删除。真实删除优先使用显式 `source remove`，避免网络盘或外置盘短暂不可用在维护时静默删除 normalized docs 和 chunks。
-
-Vector dependencies 不可用时使用 `--target fts`。说明 vector/hybrid retrieval 会保持 stale 或 unavailable，直到 vector indexing 成功。
-
-常规 full rebuild 优先使用 recorded pipeline，不手动串联所有命令：
+## 中断与恢复
 
 ```powershell
-& $KbExe pipeline run --manifest <manifest> --recipe local-docs --target all --vector-exe $VectorExe --json
 & $KbExe pipeline resume --manifest <manifest> --run-id <run-id> --json
 ```
 
-`state/pipeline-runs/` 下的 run record 是交接资产，记录重建了什么、哪些 gate 通过、还剩哪些 warnings。
+使用已有运行记录恢复同一任务；查看其结果、warnings 和失败阶段，不另建重复账本。直接执行的向量构建可重跑同一命令复用已完成点。新版本写锁记录进程身份，可处理同主机已退出进程遗留的锁；不要删除其他活跃任务持有的锁。
 
-重大 rebuild 前后，在项目 runtime log 中记录 effective manifest path、command set、service state、run id 和 validation result。当任务改变 source content、chunks、indexes、embedding profiles、Qdrant aliases 或 package state 时，这是必需项。
+## 模型、服务与运行时
 
-## 模型与向量检查
+绑定、故障处理见 [Hybrid 故障处理](hybrid-troubleshooting.md)，性能策略见 [Embedding 性能调优](embedding-optimization.md)。普通查询使用 `vector serve --strategy query`；手动单服务建库才使用 `--strategy index`。
 
-检查 model binding：
+更新共享 skill 时使用完整配套的运行时包，保留本机有效的模型登记和可回退副本。文件更新不等于正在运行的服务已切换；先确认服务归属与影响，不擅自中断共享服务。旧进程仍需要的文件副本应保留。
 
-```powershell
-& $KbExe embedding status --manifest <manifest> --json
-```
+更新 skill 不自动触发知识库重建。模型 profile 可能因运行时身份变化失效；需要性能策略时再按调优指南刷新。源代码构建、DLL 组装与性能实验不属于部署端维护流程。
 
-需要时绑定本地 model path：
+## 打包与恢复
 
 ```powershell
-& $KbExe embedding bind --manifest <manifest> --model-path <model-dir> --json
+& $KbExe package inspect --path <zip-or-dir> --json
+& $KbExe export-skill --manifest <manifest> --output <bundle.zip> --profile standard --json
+& $KbExe import-skill --path <bundle.zip> --output <new-kb-dir> --alias <alias> --json
 ```
 
-首次设置、driver/runtime 变化、model 变化或 vector service binary 变化后，创建或刷新 per-machine embedding optimization profile：
+`--output` 是目标 KB 目录。目标已存在时默认拒绝覆盖；只有确实要替换时使用 `--replace`。导入 alias 会写本机 registry，避免覆盖其他库的登记。
 
-```powershell
-& $KbExe embedding optimize --manifest <manifest> --vector-exe $VectorExe --providers cpu --purpose index --quick --if-missing --json
-```
+导出会更新源 KB 的 package state/checksums，再复制内容。当前排除锁、指定的临时评测报告及 logs/runtimeLogs；其他 state、索引、脚本和根目录文件仍可能被打包。不要将模型、本机 registry、秘密信息、Qdrant live storage 或开发临时文件放进待分发目录。打包检查不等于敏感信息审查。
 
-Optimization profile 是保存在 model registry 中的本机状态。不要打包进 portable KB bundle。交互式查询使用 `--purpose query`；build/rebuild 性能优化使用 `--purpose index`；机器空闲时完整刷新使用 `--purpose all`。
+备份使用 `backup create`；恢复优先使用新目录的 `backup restore --input <backup.zip> --output <dir>`，保留现有数据。Qdrant 是派生索引，不能代替来源资料备份。
 
-完整 first-run 和 active optimization policy 见 `embedding-optimization.md`。
+## 交接
 
-DirectML/CUDA 设置、provider-specific validation 和常见 GPU failures 见 `gpu-providers.md`。
-
-运行 service smoke test：
-
-```powershell
-& $KbExe vector status --manifest <manifest> --json
-& $KbExe embedding test --manifest <manifest> --json
-```
-
-如果 `vector status` 显示 model 已配置但 service unavailable，启动：
-
-```powershell
-& $KbExe vector serve --manifest <manifest> --strategy index --json
-```
-
-常规 authoring 和重复 query sessions 中，复用 Qdrant 和 `kb-vector-service`，不要反复停止启动。将它们视为本地开发服务，除非用户要求关闭、进程 wrong/stale，或服务只为一次性 smoke test 启动。
-
-如果 Docker、WSL、Qdrant 或 `kb-vector-service` 在 KB 工作中崩溃，先诊断再重启大范围服务或清理 indexes。记录失败命令、`vector status`、`index status`、可用时的 Docker/Qdrant logs，以及服务是用户启动还是任务启动。只有确认 source docs、chunks 和 manifest 完整后，才删除或重建派生 indexes。
-
-## 质量门禁
-
-KB content、chunking、manifest、indexing 或 packaging 变化后运行：
-
-```powershell
-& $KbExe content lint --manifest <manifest> --check all --json
-& $KbExe index verify --manifest <manifest> --json
-& $KbExe validate --manifest <manifest> --json
-& $KbExe smoke-test --manifest <manifest> --json
-& $KbExe audit --manifest <manifest> --json
-& $KbExe package verify --path <kb-dir-or-zip> --json
-```
-
-检索质量重要时运行 eval：
-
-```powershell
-& $KbExe eval run --manifest <manifest> --suite smoke --json
-& $KbExe eval coverage --manifest <manifest> --suite smoke --json
-& $KbExe eval compare --manifest <manifest> --suite smoke --against <baseline.json> --json
-```
-
-只有人工接受当前检索行为后，才创建或刷新 baseline：
-
-```powershell
-& $KbExe eval baseline --manifest <manifest> --suite smoke --output <baseline.json> --json
-```
-
-每个 smoke/regression case 应带有 `topic`、`language` 和 `source_id`，使 `eval coverage` 能发现 suite 意外变窄。
-
-## Qdrant 发布与回滚
-
-Production-style Qdrant 发布不要直接覆盖 active collection。先构建 staging collection，verify，运行 retrieval gates，再 promote alias：
-
-```powershell
-& $KbExe index build --manifest <manifest> --profile prod --to-staging --json
-& $KbExe index verify --manifest <manifest> --collection <staging-collection> --json
-& $KbExe eval compare --manifest <manifest> --suite smoke --against <baseline.json> --json
-& $KbExe index promote --manifest <manifest> --alias <alias> --collection <staging-collection> --json
-```
-
-如果 post-release checks 失败且记录了 previous collection：
-
-```powershell
-& $KbExe index rollback --manifest <manifest> --alias <alias> --json
-```
-
-Qdrant 仍然是派生索引。保留 source docs、chunks、content mirror、manifest 和 state 作为可重建真源。
-
-## 修复、Diff、备份
-
-风险维护前使用 `diff`：
-
-```powershell
-& $KbExe diff --manifest <manifest> --against <old-bundle-or-manifest> --json
-```
-
-`repair` 只用于可重建 state 和派生 metadata：
-
-```powershell
-& $KbExe repair --manifest <manifest> --json
-```
-
-批量 update 或 replace 前创建 backups：
-
-```powershell
-& $KbExe backup create --manifest <manifest> --output <backup.zip> --json
-```
-
-本地派生 indexes：
-
-```powershell
-& $KbExe index snapshot --manifest <manifest> --output <dir> --json
-& $KbExe index snapshot --manifest <manifest> --collection <collection> --output <dir> --json
-& $KbExe index snapshot --manifest <manifest> --collection <collection> --output <dir> --no-download --json
-& $KbExe index snapshot-verify --manifest <manifest> --snapshot <dir-or-file> --collection <temporary-collection> --json
-& $KbExe index snapshot --manifest <manifest> --output <dir> --skip-qdrant --json
-```
-
-Promotion 前使用 `--collection` snapshot 并验证 staging collection。当 Qdrant node 可从自己的 snapshot location 恢复，且 snapshot file 太大或下载太慢时，加 `--no-download`。检查 `snapshot-verify` 输出中的 `data.valid`；必须为 true 才能把 drill 计为通过。
-
-当 Qdrant snapshot 太慢、太大、被本地 node 阻塞，或因 vector collection 可从 chunks 重建而不必要时，使用 `--skip-qdrant`。在 runtime log 中记录该限制。
-
-默认恢复到新目录。只有用户明确要求覆盖现有 KB 时，才使用 `--replace`。
-
-## 运行日志
-
-调试时设置 `KB_LOG_DIR` 到项目日志目录，使 console JSON 保持可解析，同时持久化 runtime details：
-
-```powershell
-$env:KB_LOG_DIR = "<project-runtimeLogs-dir>"
-```
-
-不要无意留下只用于一次性 smoke-test 的 helper services。只有当 vector service 仅为临时测试启动，且后续 KB 工作不依赖它时，才停止：
-
-```powershell
-& $KbExe vector stop --json
-```
-
-如果在调试任务中停止服务，在 runtime log 中记录原因。
+说明内容或配置变化、已执行的检查、仍不可用的检索能力及恢复入口即可。普通维护不强制执行全部 eval、audit、package 检查，也不要求再写一份与运行记录重复的日志。
